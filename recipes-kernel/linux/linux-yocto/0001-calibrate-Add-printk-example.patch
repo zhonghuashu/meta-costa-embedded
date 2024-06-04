@@ -1,0 +1,29 @@
+From 430047fae2c731baf506448cee8a24e7b7008b71 Mon Sep 17 00:00:00 2001
+From: "Shu, Zhong Hua" <zhonghua.shu@siemens.com>
+Date: Tue, 28 May 2024 22:05:49 +0800
+Subject: [PATCH 1/2] calibrate: Add printk example
+
+---
+ init/calibrate.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/init/calibrate.c b/init/calibrate.c
+index f3831272f113..9fad42670fe1 100644
+--- a/init/calibrate.c
++++ b/init/calibrate.c
+@@ -278,6 +278,12 @@ void calibrate_delay(void)
+ 	static bool printed;
+ 	int this_cpu = smp_processor_id();
+ 
++    printk("*************************************\n");
++    printk("*                                   *\n");
++    printk("*        HELLO YOCTO KERNEL         *\n");
++    printk("*                                   *\n");
++    printk("*************************************\n");
++	
+ 	if (per_cpu(cpu_loops_per_jiffy, this_cpu)) {
+ 		lpj = per_cpu(cpu_loops_per_jiffy, this_cpu);
+ 		if (!printed)
+-- 
+2.34.1
+

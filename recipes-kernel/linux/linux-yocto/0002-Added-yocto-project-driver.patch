@@ -1,0 +1,64 @@
+From 201696749ed60d38294f2559c975a89ebfd4562e Mon Sep 17 00:00:00 2001
+From: "Shu, Zhong Hua" <zhonghua.shu@siemens.com>
+Date: Tue, 28 May 2024 22:14:47 +0800
+Subject: [PATCH 2/2] Added yocto project driver
+
+---
+ drivers/misc/Kconfig     |  5 +++++
+ drivers/misc/Makefile    |  1 +
+ drivers/misc/yp_driver.c | 16 ++++++++++++++++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 drivers/misc/yp_driver.c
+
+diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
+index 0f5a49fc7c9e..093371e5a2d8 100644
+--- a/drivers/misc/Kconfig
++++ b/drivers/misc/Kconfig
+@@ -470,6 +470,11 @@ config HISI_HIKEY_USB
+ 	  switching between the dual-role USB-C port and the USB-A host ports
+ 	  using only one USB controller.
+ 
++config YP_DRIVER
++	tristate "Yocto Project Test Driver"
++	help
++	  This driver does nothing but print a message.
++
+ source "drivers/misc/c2port/Kconfig"
+ source "drivers/misc/eeprom/Kconfig"
+ source "drivers/misc/cb710/Kconfig"
+diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
+index a086197af544..de055a1584ae 100644
+--- a/drivers/misc/Makefile
++++ b/drivers/misc/Makefile
+@@ -59,3 +59,4 @@ obj-$(CONFIG_UACCE)		+= uacce/
+ obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
+ obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
+ obj-$(CONFIG_HI6421V600_IRQ)	+= hi6421v600-irq.o
++obj-$(CONFIG_PY_DRIVER) += yp_driver.o
+\ No newline at end of file
+diff --git a/drivers/misc/yp_driver.c b/drivers/misc/yp_driver.c
+new file mode 100644
+index 000000000000..302453280af1
+--- /dev/null
++++ b/drivers/misc/yp_driver.c
+@@ -0,0 +1,16 @@
++#include <linux/module.h>
++
++static int __init yocto_testmod_init(void)
++{
++    pr_info("Hello Kernel from the Yocto Project!");
++
++    return 0;
++}
++
++static void __exit yocto_testmod_exit(void)
++{
++    pr_info("Gone finishing. I'll be back!");
++}
++
++module_init(yocto_testmod_init);
++module_exit(yocto_testmod_exit);
+\ No newline at end of file
+-- 
+2.34.1
+

@@ -1,0 +1,22 @@
+From 63f2963d4d751094ba7a6e25cc7edec0b7efafb8 Mon Sep 17 00:00:00 2001
+From: "Shu, Zhong Hua" <zhonghua.shu@siemens.com>
+Date: Sun, 26 May 2024 15:02:35 +0800
+Subject: [PATCH] Changed bbexample message
+
+---
+ bbexample.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bbexample.c b/bbexample.c
+index 4dfa4bf..0f17fd9 100644
+--- a/bbexample.c
++++ b/bbexample.c
+@@ -10,7 +10,7 @@
+ 
+ int main(int argc, char *argv[])
+ {
+-  printf("Hello Yocto World...\n");
++  printf("Hello Yocto World v2...\n");
+ 
+   LibHelloWorld();
+ 
