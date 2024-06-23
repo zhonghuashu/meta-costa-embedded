@@ -188,10 +188,10 @@ bitbake hello-autotools
 - BitBake Task Map see [SVG](https://docs.yoctoproject.org/_images/bitbake_tasks_map.svg)
 ```shell
 tar --transform "s/^\./libhello-1.0/" -czvf libhello-1.0.tgz .
-mv -f libhello-1.0.tgz ~/yocto/example-yocto/meta-costa-embedded/recipes-example/libhello/files
+mv -f libhello-1.0.tgz ~/yocto/meta-costa-embedded/recipes-example/libhello/files
 
 tar --transform "s/^\./sayhello-1.0/" -czvf sayhello-1.0.tgz .
-mv -f sayhello-1.0.tgz ~/yocto/example-yocto/meta-costa-embedded/recipes-example/sayhello/files
+mv -f sayhello-1.0.tgz ~/yocto/meta-costa-embedded/recipes-example/sayhello/files
 
 # -v: Enable verbose output in additional to log file.
 bitbake sayhello -v
@@ -220,6 +220,33 @@ devtool finish bbexample meta-costa-embedded
 # Build image
 devtool build-image costa-embedded-image
 ```
+
+## Upgrade recipes
+- Refer to: [Use devtool upgrade](https://docs.yoctoproject.org/dev-manual/upgrading-recipes.html#using-devtool-upgrade)
+
+```shell
+# Add meta-oe layer in the meta-openembedded repository
+git clone https://git.openembedded.org/meta-openembedded --depth=1 -b kirkstone
+bitbake-layers add-layer /home/shu/yocto/meta-openembedded/meta-oe
+# Append nano in costa-embedded-image.bb > IMAGE_INSTALL.
+bitbake costa-embedded-image
+
+# Find out what version a recipe is currently at upstream.
+$ devtool latest-version nano
+INFO: Current version: 6.2
+INFO: Latest version: 8.0
+
+# Automatically upgrades the recipe ot latest at upstream.
+devtool upgrade nano
+devtool build nano
+devtool finish nano meta-oe
+
+# runqemu nographic
+root@qemux86-64:~# nano --version
+ GNU nano, version 6.2
+```
+
+
 ## Kernel development with devtool
 - Refer to [Using devtool to Patch the Kernel](https://docs.yoctoproject.org/kernel-dev/common.html#using-devtool-to-patch-the-kernel)
 ```shell
@@ -263,6 +290,29 @@ bitbake costa-embedded-image
 runqemu nographic
 $ cat /proc/cpuinfo | grep processor
 processor       : 0
+```
 
+## Add machine arrow-sockit
+- Add meta-intel-fpga
+```shell
+git clone https://git.yoctoproject.org/git/meta-intel-fpga --depth=1 -b kirkstone
+# Change BBLAYERS in build/conf/bblayers.conf.
+bitbake-layers add-layer /home/shu/yocto/meta-intel-fpga
+bitbake-layers show-layers
+# Change build/conf/local.conf
+# - Change MACHINE from qemux86-64 to arrow-sockit
+# - Preferred provider for virtual/kernel, virtual/bootloader
+# - linux-socfpga doesn't work for qemu on x86. 
+
+# Build linux for machine arrow-sockit
+bitbake virtual/kernel
+bitbake cost-embedded-image
+```
+- Add necessary dev recipes.
+```shell
+bitbake-layers add-layer /home/shu/yocto/meta-openembedded/meta-python
+bitbake-layers add-layer /home/shu/yocto/meta-openembedded/meta-networking
+# Add additional recipes: vsfptd htop
+bitbake costa-embedded-image
 
 ```
