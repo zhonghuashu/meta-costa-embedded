@@ -1,26 +1,40 @@
+
+meta-costa-embedded
+=================
 This README file contains information on the contents of the meta-costa-embedded layer.
 
-Please see the corresponding sections below for details.
+- Build `costa-embedded-image` for qemux86-64
+```shell
+# build/conf/local.conf
+MACHINE ??= "qemux86-64"
+PREFERRED_PROVIDER_virtual/kernel = "linux-socfpga-lts"
+PREFERRED_VERSION_linux-socfpga-lts = "5.10%"
+PREFERRED_PROVIDER_virtual/bootloader = "u-boot-socfpga"
+PREFERRED_VERSION_u-boot-socfpga = "v2022.04%"
+```
+- Build images for arrow-sockit using altera socfpga linux / u-boot
+```shell
+# build/conf/local.conf
+MACHINE ?= "arrow-sockit"
+PREFERRED_PROVIDER_virtual/kernel = "linux-yocto"
+PREFERRED_VERSION_linux-socfpga-lts = "5.15%"
+PREFERRED_PROVIDER_virtual/bootloader = "u-boot-socfpga"
+PREFERRED_VERSION_u-boot-socfpga = "v2022.04%"
 
-Dependencies
-============
+# build/conf/bblayers.conf
+BBLAYERS ?= " \
+  /home/shu/yocto/poky/meta \
+  /home/shu/yocto/poky/meta-poky \
+  /home/shu/yocto/poky/meta-yocto-bsp \
+  /home/shu/yocto/meta-openembedded/meta-oe \
+  /home/shu/yocto/meta-costa-embedded \
+  /home/shu/yocto/build/workspace \
+  /home/shu/yocto/meta-intel-fpga \
+  /home/shu/yocto/meta-openembedded/meta-python \
+  /home/shu/yocto/meta-openembedded/meta-networking \
+  "
+```
 
-  URI: <first dependency>
-  branch: <branch name>
-
-  URI: <second dependency>
-  branch: <branch name>
-
-Patches
-=======
-
-Please submit any patches against the meta-costa-embedded layer to the xxxx mailing list (xxxx@zzzz.org)
-and cc: the maintainer:
-
-Maintainer: XXX YYYYYY <xxx.yyyyyy@zzzzz.com>
-
-Table of Contents
-=================
 ## meta-costa-embedded
 Customize embedded linux distribution using Yocto build.
 - VS Code extension: Yocto Project BitBake

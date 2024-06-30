@@ -6,13 +6,6 @@ DESCRIPTION = "Test performance for top."
 LICENSE = "CLOSED"
 
 SRC_URI = "file://${P}.tgz"
-
-EXTRA_OEMAKE = "'CC=${CPP}' \
-                'AR=${AR}' \
-                'RANLIB=${RANLIB}' \
-				'CFLAGS=${CFLAGS} -I${S}/.' \
-				'LDFLAGS=${LDFLAGS}' \
-				'BUILDDIR=${S}'"
                 
 do_install(){
    install -d ${D}/usr/bin
