@@ -2,46 +2,41 @@
 meta-costa-embedded
 =================
 This README file contains information on the contents of the meta-costa-embedded layer.
-
-- Build `costa-embedded-image` for qemux86-64
-```shell
-# build/conf/local.conf
-MACHINE ??= "qemux86-64"
-PREFERRED_PROVIDER_virtual/kernel = "linux-socfpga-lts"
-PREFERRED_VERSION_linux-socfpga-lts = "5.10%"
-PREFERRED_PROVIDER_virtual/bootloader = "u-boot-socfpga"
-PREFERRED_VERSION_u-boot-socfpga = "v2022.04%"
+- Working folder structure:
 ```
-- Build images for arrow-sockit using altera socfpga linux / u-boot
+/home/shu/yocto
+├── build                   ... Yocto build folder.
+├── example-project         ... Example hello world C project.
+├── example-yocto           ... Example yocto project.
+├── meta-costa-embedded     ... Meta customized linux distribution (bootloader, device tree, kernel rootfs).
+├── meta-intel-fpga         ... Intel Cyclone V SoC FPGA BSP support.
+├── meta-openembedded       ... Recipes for third-party package.
+└── poky                    ... Default yocto / poky linux distribution.
+```
+- git modules: 
 ```shell
-# build/conf/local.conf
-MACHINE ?= "arrow-sockit"
-PREFERRED_PROVIDER_virtual/kernel = "linux-yocto"
-PREFERRED_VERSION_linux-socfpga-lts = "5.15%"
-PREFERRED_PROVIDER_virtual/bootloader = "u-boot-socfpga"
-PREFERRED_VERSION_u-boot-socfpga = "v2022.04%"
-
-# build/conf/bblayers.conf
-BBLAYERS ?= " \
-  /home/shu/yocto/poky/meta \
-  /home/shu/yocto/poky/meta-poky \
-  /home/shu/yocto/poky/meta-yocto-bsp \
-  /home/shu/yocto/meta-openembedded/meta-oe \
-  /home/shu/yocto/meta-costa-embedded \
-  /home/shu/yocto/build/workspace \
-  /home/shu/yocto/meta-intel-fpga \
-  /home/shu/yocto/meta-openembedded/meta-python \
-  /home/shu/yocto/meta-openembedded/meta-networking \
-  "
+mkdir ~/yocto && cd yocto
+git clone https://github.com/zhonghuashu/example-project
+git clone https://github.com/zhonghuashu/example-yocto
+git clone https://github.com/zhonghuashu/meta-costa-embedded
+# Release 4.0 (kirkstone)
+git clone -b kirkstone --depth=1 https://git.yoctoproject.org/poky
+git clone https://git.yoctoproject.org/git/meta-intel-fpga --depth=1 -b kirkstone
+git clone https://git.openembedded.org/meta-openembedded --depth=1 -b kirkstone
 ```
 
 ## meta-costa-embedded
 Customize embedded linux distribution using Yocto build.
 - VS Code extension: Yocto Project BitBake
 ```shell
-# Adding the meta-costa-embedded layer to your build
-bitbake-layers add-layer meta-costa-embedded
+# Build u-boot / linux kernel package.
+bitbake virtual/bootloader
+bitbake virtual/kernel
+# Build customized arrow-sockit image based on core-image-minimal
+bitbake costa-embedded-image
+# Program tmp/deploy/image/costa-embedded-image-arrow-sockit.rootfs.wic into sd card.
 ```
+
 ## Setup host package
 ```shell
 # For ubuntu-22.04
@@ -53,11 +48,11 @@ $ apt install gawk wget git diffstat unzip texinfo gcc build-essential chrpath s
 - Refer to [Yocto Quick build](https://docs.yoctoproject.org/brief-yoctoprojectqs/index.html)
 - Refer to [Yocto构建流程](https://zhuanlan.zhihu.com/p/663983749)
 ```shell
-$ mkdir ~/yocto && cd yocto
-# Release 4.0 (kirkstone)
-$ git clone -b kirkstone --depth=1 https://git.yoctoproject.org/poky
 # Define Yocto Project’s build environment on your build host.
+$ cd ~/yocto
 $ source poky/oe-init-build-env
+$ ln -s /home/shu/yocto/meta-costa-embedded/build/bblayers.conf bblayers.conf
+$ ln -s /home/shu/yocto/meta-costa-embedded/build/local.conf local.conf
 # Build image with minimal size.
 $ bitbake core-image-minimal
 # Simulate Your Image Using QEMU.
@@ -131,6 +126,7 @@ costa-embedded (Costa Embedded Linux by Yocto) 4.0.18 qemux86-64 /dev/ttyS0
 qemux86-64 login: root
 root@qemux86-64:~#
 ```
+
 ## Add OSS packages
 - Refer to [添加包到镜像中](https://zhuanlan.zhihu.com/p/666675477)
 ```shell
@@ -193,7 +189,6 @@ recipetool create -o hello-autotools_2.3.bb https://ftp.gnu.org/gnu/hello/hello-
 bitbake helloworld
 bitbake lz4
 bitbake hello-autotools
-
 ```
 
 ## Add example sayhello from Yocto Project Concept
@@ -214,6 +209,7 @@ bitbake costa-embedded-image
 root@qemux86-64:~# sayhello
 Hello from a Yocto demo
 ```
+
 ## Application development with devtool
 - Refer to [Application Development with Extensible SDK](https://wiki.yoctoproject.org/wiki/Application_Development_with_Extensible_SDK)
 ```shell
@@ -240,7 +236,6 @@ devtool build-image costa-embedded-image
 
 ```shell
 # Add meta-oe layer in the meta-openembedded repository
-git clone https://git.openembedded.org/meta-openembedded --depth=1 -b kirkstone
 bitbake-layers add-layer /home/shu/yocto/meta-openembedded/meta-oe
 # Append nano in costa-embedded-image.bb > IMAGE_INSTALL.
 bitbake costa-embedded-image
@@ -259,7 +254,6 @@ devtool finish nano meta-oe
 root@qemux86-64:~# nano --version
  GNU nano, version 6.2
 ```
-
 
 ## Kernel development with devtool
 - Refer to [Using devtool to Patch the Kernel](https://docs.yoctoproject.org/kernel-dev/common.html#using-devtool-to-patch-the-kernel)
@@ -309,7 +303,6 @@ processor       : 0
 ## Add machine arrow-sockit
 - Add meta-intel-fpga
 ```shell
-git clone https://git.yoctoproject.org/git/meta-intel-fpga --depth=1 -b kirkstone
 # Change BBLAYERS in build/conf/bblayers.conf.
 bitbake-layers add-layer /home/shu/yocto/meta-intel-fpga
 bitbake-layers show-layers
