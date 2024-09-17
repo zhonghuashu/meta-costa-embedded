@@ -210,6 +210,23 @@ root@qemux86-64:~# sayhello
 Hello from a Yocto demo
 ```
 
+## Add other examples
+- `toptest`: Verify if short period in us will increase ksoftirqd CPU load.
+- `timertest`: Verify if linux timer will sometimes increase CPU load (restart app) in Linux RT patch.
+```shell
+# 命令行编译
+export PATH=$PATH:/home/shu/yocto/build/tmp/sysroots/x86_64/usr/bin/arm-costaembedded-linux-gnueabi
+# 交叉编译，e.g., yocto / toptest, timertest
+make CROSS_COMPILE=arm-costaembedded-linux-gnueabi-
+
+cd /home/shu/yocto/example-project/timertest
+tar --transform "s/^\./timertest-1.0/" -czvf timertest-1.0.tgz .
+mv timertest-1.0.tgz /home/shu/yocto/meta-costa-embedded/recipes-example/timertest/files
+
+bitbake toptest
+bitbake timertest
+```
+
 ## Application development with devtool
 - Refer to [Application Development with Extensible SDK](https://wiki.yoctoproject.org/wiki/Application_Development_with_Extensible_SDK)
 ```shell
@@ -323,3 +340,6 @@ bitbake-layers add-layer /home/shu/yocto/meta-openembedded/meta-networking
 bitbake costa-embedded-image
 
 ```
+
+## arrow-sockit gsrd
+- device tree

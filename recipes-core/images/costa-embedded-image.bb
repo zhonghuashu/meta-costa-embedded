@@ -5,11 +5,12 @@ IMAGE_INSTALL:append = " dropbear \
                         hello-cmake \
                         helloworld \
                         hello-autotools \
-                        toptest \
                         lz4 \
                         bbexample \
                         sayhello \
                         nano \
                         vsftpd \
                         htop \
+                        toptest \
+                        timertest \
                         "
