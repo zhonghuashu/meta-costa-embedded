@@ -213,11 +213,12 @@ Hello from a Yocto demo
 ## Add other examples
 - `toptest`: Verify if short period in us will increase ksoftirqd CPU load.
 - `timertest`: Verify if linux timer will sometimes increase CPU load (restart app) in Linux RT patch.
+- `hello-cpp`: Example application written with C++.
 ```shell
 # 命令行编译
 export PATH=$PATH:/home/shu/yocto/build/tmp/sysroots/x86_64/usr/bin/arm-costaembedded-linux-gnueabi
 # 交叉编译，e.g., yocto / toptest, timertest
-make CROSS_COMPILE=arm-costaembedded-linux-gnueabi-
+make CROSS_COMPILE=arm-costaembedded-linux-gnueabi- ARCH=arm
 
 cd /home/shu/yocto/example-project/timertest
 tar --transform "s/^\./timertest-1.0/" -czvf timertest-1.0.tgz .
