@@ -8,7 +8,7 @@
 # The following license files were not able to be identified and are
 # represented as "Unknown" below, you will need to check them yourself:
 #   COPYING
-LICENSE = "Unknown"
+LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://COPYING;md5=adefda309052235aa5d1e99ce7557010"
 
 SRC_URI = "https://ftp.gnu.org/gnu/hello/hello-${PV}.tar.gz"
