@@ -1,6 +1,9 @@
 require recipes-core/images/core-image-minimal.bb
 
 IMAGE_INSTALL:append = " dropbear \
+                        procps \
+                        vsftpd \
+                        htop \
                         hello-make \
                         hello-cmake \
                         hello-cpp \
@@ -10,8 +13,6 @@ IMAGE_INSTALL:append = " dropbear \
                         bbexample \
                         sayhello \
                         nano \
-                        vsftpd \
-                        htop \
                         toptest \
                         timertest \
                         "
