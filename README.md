@@ -19,15 +19,16 @@ mkdir ~/yocto && cd yocto
 git clone https://github.com/zhonghuashu/example-project
 git clone https://github.com/zhonghuashu/example-yocto
 git clone https://github.com/zhonghuashu/meta-costa-embedded
-# Release 4.0 (kirkstone)
-git clone -b kirkstone --depth=1 https://git.yoctoproject.org/poky
-git clone https://git.yoctoproject.org/git/meta-intel-fpga --depth=1 -b kirkstone
-git clone https://git.openembedded.org/meta-openembedded --depth=1 -b kirkstone
+# Release 5.0 (scarthgap)
+git clone https://git.yoctoproject.org/poky --depth=1 -b scarthgap
+git clone https://git.yoctoproject.org/git/meta-intel-fpga --depth=1 -b scarthgap
+git clone https://git.openembedded.org/meta-openembedded --depth=1 -b scarthgap
 ```
 
 ## meta-costa-embedded
 Customize embedded linux distribution using Yocto build.
 - VS Code extension: Yocto Project BitBake
+- Source bitbake build environment: `source poky/oe-init-build-env`
 ```shell
 # Build u-boot / linux kernel package.
 bitbake virtual/bootloader
@@ -35,6 +36,10 @@ bitbake virtual/kernel
 # Build customized arrow-sockit image based on core-image-minimal
 bitbake costa-embedded-image
 # Program tmp/deploy/image/costa-embedded-image-arrow-sockit.rootfs.wic into sd card.
+
+# Clean all and rebuild.
+bitbake -c cleanall costa-embedded-image
+rm -rf tmp/work tmp/stamps tmp/cache tmp/log
 ```
 
 ## Setup host package
