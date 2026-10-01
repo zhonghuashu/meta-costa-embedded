@@ -1,0 +1,74 @@
+diff --git a/common/spl/Kconfig b/common/spl/Kconfig
+index 3b7b6caf..d5f4a200 100644
+--- a/common/spl/Kconfig
++++ b/common/spl/Kconfig
+@@ -554,9 +554,9 @@ config SPL_SYS_MMCSD_RAW_MODE
+ 
+ if SPL_SYS_MMCSD_RAW_MODE
+ 
+-choice
+-	prompt "Method for locating next phase of boot (e.g. U-Boot)"
+-	default SYS_MMCSD_RAW_MODE_U_BOOT_USE_SECTOR if MVEBU_SPL_BOOT_DEVICE_MMC
++#choice
++#	prompt "Method for locating next phase of boot (e.g. U-Boot)"
++#	default SYS_MMCSD_RAW_MODE_U_BOOT_USE_SECTOR if MVEBU_SPL_BOOT_DEVICE_MMC
+ 
+ config SYS_MMCSD_RAW_MODE_U_BOOT_USE_SECTOR
+ 	bool "MMC raw mode: by sector"
+@@ -579,7 +579,7 @@ config SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION_TYPE
+ 	  raw mode. U-Boot will be loaded from the first partition of this
+ 	  type to be found.
+ 
+-endchoice
++#endchoice
+ 
+ config SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR
+ 	hex "Address on the MMC to load U-Boot from"
+diff --git a/configs/socfpga_sockit_defconfig b/configs/socfpga_sockit_defconfig
+index fed1dd83..5c6b8c79 100644
+--- a/configs/socfpga_sockit_defconfig
++++ b/configs/socfpga_sockit_defconfig
+@@ -12,10 +12,12 @@ CONFIG_DM_RESET=y
+ CONFIG_SPL_STACK=0x0
+ CONFIG_SPL_TEXT_BASE=0xFFFF0000
+ CONFIG_TARGET_SOCFPGA_TERASIC_SOCKIT=y
++CONFIG_SPL_FS_FAT=n
++# CONFIG_SPL_SPI is not set
+ CONFIG_TIMESTAMP=y
+ CONFIG_FIT=y
+ CONFIG_DISTRO_DEFAULTS=y
+-# CONFIG_USE_BOOTCOMMAND is not set
++CONFIG_BOOTCOMMAND="run fatscript;bridge enable; run distro_bootcmd"
+ CONFIG_DEFAULT_FDT_FILE="socfpga_cyclone5_sockit.dtb"
+ CONFIG_SYS_CONSOLE_IS_IN_ENV=y
+ CONFIG_SYS_CONSOLE_OVERWRITE_ROUTINE=y
+@@ -27,8 +29,6 @@ CONFIG_SPL_PAD_TO=0x10000
+ CONFIG_SPL_NO_BSS_LIMIT=y
+ # CONFIG_SPL_SHARES_INIT_SP_ADDR is not set
+ CONFIG_SPL_HAVE_INIT_STACK=y
+-CONFIG_SPL_SPI_LOAD=y
+-CONFIG_SYS_SPI_U_BOOT_OFFS=0x40000
+ CONFIG_SYS_MAXARGS=32
+ CONFIG_CMD_ASKENV=y
+ CONFIG_CMD_GREPENV=y
+@@ -66,6 +66,7 @@ CONFIG_PHY_MICREL=y
+ CONFIG_PHY_MICREL_KSZ90X1=y
+ CONFIG_ETH_DESIGNWARE=y
+ CONFIG_MII=y
++CONFIG_NET_RANDOM_ETHADDR=y
+ CONFIG_SPI=y
+ CONFIG_CADENCE_QSPI=y
+ CONFIG_DESIGNWARE_SPI=y
+@@ -79,3 +80,11 @@ CONFIG_USB_GADGET_DWC2_OTG=y
+ CONFIG_USB_GADGET_DOWNLOAD=y
+ # CONFIG_SPL_WDT is not set
+ CONFIG_SYS_TIMER_COUNTS_DOWN=y
++CONFIG_WDT=y
++# CONFIG_TOOLS_MKEFICAPSULE is not set
++CONFIG_SPL_SYS_MMCSD_RAW_MODE=y
++CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_SECTOR=y
++CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR=0x200
++CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION=y
++CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_USE_PARTITION_TYPE=y
++CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_PARTITION_TYPE=0xa2
+\ No newline at end of file

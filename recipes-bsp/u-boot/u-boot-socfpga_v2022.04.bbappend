@@ -7,4 +7,4 @@ SRCREV = "fda0d9176f375b7f9fa64fea4d9f4e6fe0b5d158"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI += "file://socfpga_sockit_sdcard.cfg"
+SRC_URI += "file://socfpga_sockit_v2022.04.cfg"
